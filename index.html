@@ -60,7 +60,7 @@
 
       const currentTime = new Date().getTime();
       const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
-      if (lastSubmissionTime && (currentTime - parseInt(lastSubmissionTime) < 0 * 0 * 0 * 0)) {
+      if (lastSubmissionTime && (currentTime - parseInt(lastSubmissionTime) < 24 * 60 * 60 * 1000)) {
         alert('تستطيع ارسال كل 24 ساعة فقط');
         return;
       }
