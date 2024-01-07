@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>تقديم الى اداره كينج</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      background-color: black; /* Set background color to black */
+      color: white; /* Set text color to white for visibility */
+    }
+    .questions {
+      max-width: 400px;
+      text-align: center;
+      padding: 20px;
+    }
+    .send-btn {
+      margin-top: 20px;
+    }
+    input[type="text"] {
+      width: 80%;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="questions">
+    <h2>تقديم</h2>
+    <p>اسمك حقيقي ؟</p>
+    <input type="text" placeholder="يرجى كتابة هنا" id="q1">
+    <p>اسمك ديسكورد ؟</p>
+    <input type="text" placeholder="يرجى كتابة هنا" id="q2">
+    <p>كنت في اداره في سيرفر ايه ؟</p>
+    <input type="text" placeholder="يرجى كتابة هنا" id="q3">
+    <p>هتساعد في ايه ؟</p>
+    <input type="text" placeholder="يرجى كتابة هنا" id="q4">
+    <p>بلدك ؟</p>
+    <input type="text" placeholder="يرجى كتابة هنا" id="q5">
+    <p>لفلك كتابي ؟</p>
+    <input type="text" placeholder="يرجى كتابة هنا" id="q6">
+    <button class="send-btn" onclick="sendToDiscord()">ارسال تقديم</button>
+  </div>
+
+  <script>
+    function sendToDiscord() {
+      const q1 = document.getElementById('q1').value.trim();
+      const q2 = document.getElementById('q2').value.trim();
+      const q3 = document.getElementById('q3').value.trim();
+      const q4 = document.getElementById('q4').value.trim();
+      const q5 = document.getElementById('q5').value.trim();
+      const q6 = document.getElementById('q6').value.trim();
+
+      if (q1 === '' || q2 === '' || q3 === '' || q4 === '' || q5 === '' || q6 === '') {
+        alert('يرجى مراجعة اساله و كتابة اساله كلها صحيحه و بدون نسيان حاجة');
+        return;
+      }
+
+      const currentTime = new Date().getTime();
+      const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
+      if (lastSubmissionTime && (currentTime - parseInt(lastSubmissionTime) < 0 * 0 * 0 * 0)) {
+        alert('تستطيع ارسال كل 24 ساعة فقط');
+        return;
+      }
+
+      const questions = `
+        **اسم حقيقي**
+        ${q1}
+
+        **اسم في ديسكورد**
+        ${q2}
+
+        **كان اداره في سيرفر ايه**
+        ${q3}
+
+        **هيساعد في ايه**
+        ${q4}
+
+        **بلدو**
+        ${q5}
+
+        **لفلو كتابي**
+        ${q6}
+      `;
+
+      const webhookURL = 'https://discordapp.com/api/webhooks/1193654535911133334/81T29OFo594sWNpofLlhvwUjzwEY0sprW1KJMlgaHU1qioTvfvTHxJMGQk6kiZ-Gv_Q1';
+
+      fetch(webhookURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: questions }),
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('Questions sent successfully!');
+          localStorage.setItem('lastSubmissionTime', currentTime.toString());
+        } else {
+          alert('Failed to send questions.');
+        }
+      })
+      .catch(error => {
+        console.error('Error sending questions:', error);
+        alert('Error sending questions. Please try again.');
+      });
+    }
+  </script>
+</body>
+</html>
